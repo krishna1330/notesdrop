@@ -10,7 +10,7 @@ export const fetchSubjects = async () => {
         console.error('Error fetching subjects:', error.message);
         return [];
     }
-    
+
     return data;
 };
 
@@ -27,4 +27,32 @@ export const fetchNotesBySubject = async (subjectId) => {
     }
 
     return data;
+};
+
+export const addSubject = async (subjectData) => {
+    const { data, error } = await supabase
+        .from('subjects')
+        .insert([subjectData])
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error adding subject:', error.message);
+        return null;
+    }
+
+    return data;
+};
+
+export const uploadNotes = async (notesArray) => {
+    const { error } = await supabase
+        .from('notes')
+        .insert(notesArray);
+
+    if (error) {
+        console.error('Error uploading notes:', error.message);
+        return false;
+    }
+
+    return true;
 };
